@@ -20,6 +20,7 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " publisher text," +
                 " lastClickTime Long," +
                 " newsID text," +
+                " images text," +
                 " keywords text" +
                 ")");
         db.execSQL("create table favorite (" +
@@ -29,7 +30,23 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " publisher text," +
                 " lastClickTime Long," +
                 " newsID text," +
+                " images text," +
                 " keywords text" +
+                ")");
+        db.execSQL("create table keywords (" +
+                " word text," +
+                " score double" +
+                ")");
+        db.execSQL("create table queryhistory (" +
+                " message text," +
+                " times int," +
+                " lastQueryTime Long" +
+                ")");
+        db.execSQL("create table grid (" +
+                " id int,"+
+                " orderid int,"+
+                " item text,"+
+                " status int"+
                 ")");
     }
 

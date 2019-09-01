@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/textView"
         android:textSize="18sp"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
@@ -15,7 +15,7 @@
         />
 
     <LinearLayout
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center">
@@ -41,13 +41,13 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@color/black"
         android:text="TextView" />
     <View
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#CCCCCC"
         android:id="@+id/separator"

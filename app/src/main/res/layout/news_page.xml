@@ -12,15 +12,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+
+
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
-            android:layout_width="375dp"
+            android:layout_weight="11.0"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:tabMode="scrollable"
             android:background="?attr/colorPrimary" />
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1.0"
             android:layout_gravity="center"
             android:id="@+id/add"
             android:background="@drawable/ic_add_black_24dp"
