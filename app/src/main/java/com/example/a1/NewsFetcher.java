@@ -67,7 +67,13 @@ public class NewsFetcher {
                     String content=js.getString("content");
                     String publisher=js.getString("publisher");
                     String newsID=js.getString("newsID");
+                    String allimages=js.getString("image");
+                    String[] images=allimages.substring(1,allimages.length()-1).split(", ");
                     NewsMessage newsMessage=new NewsMessage(title,content,time,publisher,newsID);
+                    for(String image:images) {
+                        if(!image.equals(""))
+                        newsMessage.addImage(image);
+                    }
                     JSONArray keywords=js.getJSONArray("keywords");
                     for(int j=0;j<keywords.length();j++){
                         JSONObject kw=keywords.getJSONObject(j);
@@ -84,8 +90,9 @@ public class NewsFetcher {
             bufferedReader.close();
             httpURLConnection.disconnect();
         } catch (Exception e) {
+            Log.d("qwqwq","wwqwwq");
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 }

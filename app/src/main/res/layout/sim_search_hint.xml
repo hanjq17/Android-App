@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/search_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/ic_search_gray_24dp"/>
+
+
+
+        <TextView
+            android:id="@+id/sim_search_hint"
+            android:layout_width="305dp"
+            android:layout_height="40dp"
+            android:textSize="17sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp" />
+
+
+        <Button
+            android:id="@+id/search_cancel"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_clear_black_24dp"/>
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="380dp"
+        android:layout_height="2dp"
+        android:background="#CCCCCC"
+        android:id="@+id/separator"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_gravity="center">
+
+    </View>
+</LinearLayout>
+
+
+
+
+

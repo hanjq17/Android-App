@@ -28,4 +28,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'com.github.chengzhicao:ChannelView:v1.0.9'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }

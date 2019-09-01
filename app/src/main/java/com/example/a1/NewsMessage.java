@@ -23,6 +23,7 @@ public class NewsMessage {
     private String time;
     private String publisher;
     private String newsID;
+    private ArrayList<String> images=new ArrayList<>();
     private ArrayList<KeyWord> keyWords=new ArrayList<>();
     public NewsMessage(String title,String content,String time,String publisher,String newsID){
         this.title=title;
@@ -52,6 +53,7 @@ public class NewsMessage {
     public void addKeywords(String allkeywords){
         String[] keywords=allkeywords.split("\\|");
         for(String keyword:keywords){
+            if(keyword.equals("")) continue;
             String[] wordAndScore=keyword.split(",");
             addKeyword(wordAndScore[0],Double.parseDouble(wordAndScore[1]));
         }
@@ -68,5 +70,29 @@ public class NewsMessage {
     }
     public ArrayList<KeyWord> getKeyWords(){
         return keyWords;
+    }
+
+    public void addImage(String image){
+        images.add(image);
+    }
+    public void addImages(String allImages){
+        String[] images=allImages.split("\\|");
+        for(String image:images){
+            if(!image.equals(""))
+            addImage(image);
+        }
+    }
+    public void addImages(ArrayList<String> tmpImages){
+        images.addAll(tmpImages);
+    }
+    public String getStringImages(){
+        StringBuilder allImages=new StringBuilder();
+        for(String image:images){
+            allImages.append(image+"|");
+        }
+        return allImages.toString();
+    }
+    public ArrayList<String> getImages(){
+        return images;
     }
 }

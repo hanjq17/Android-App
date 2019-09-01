@@ -87,6 +87,26 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                         " word text," +
                         " score double" +
                         ")");
+                break;
+            case 6:
+                db.execSQL("create table queryhistory (" +
+                        " message text," +
+                        " times int," +
+                        " lastQueryTime Long" +
+                        ")");
+                break;
+            case 7:
+                db.execSQL("create table grid (" +
+                        " id int,"+
+                        " orderid int,"+
+                        " item text,"+
+                        " status int"+
+                        ")");
+                break;
+            case 8:
+                db.execSQL("alter table history ADD images text");
+                db.execSQL("alter table favorite ADD images text");
+                break;
         }
     }
 }

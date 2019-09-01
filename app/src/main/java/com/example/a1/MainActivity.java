@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -54,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements
     private ArrayList<Fragment> fragments=new ArrayList<>();
     private Context mContext;
     private androidx.appcompat.widget.SearchView.SearchAutoComplete mSearchAutoComplete;
+    private NewsDatabaseManager newsDatabaseManager;
+
+    public final static int CHANNELREQUEST = 1; // 请求码
+    public final static int CHANNELRESULT = 10; // 返回码
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -109,12 +114,14 @@ public class MainActivity extends AppCompatActivity implements
 
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
+
         //找到SearchView并配置相关参数
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Log.d("here","qweqwe");
+                Intent it=new Intent(MainActivity.this,SearchActivity.class);
+                startActivity(it);
                 return false;
             }
         });
@@ -130,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar tb=findViewById(R.id.toolbar_main);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle("");
+        newsDatabaseManager=NewsDatabaseManager.getInstance(this);
         mContext=this;
         for(int i=0;i<3;i++){
             fragments.add(null);
