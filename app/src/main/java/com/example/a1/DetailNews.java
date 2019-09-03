@@ -143,13 +143,13 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         int id=item.getItemId();
         switch (id){
             case R.id.share:
-                new Share2.Builder(this)
-                        .setContentType(ShareContentType.TEXT)
-                        .setTextContent("This is a test message.新闻的内容。")
-                        .setTitle("来自xx新闻的分享哦：")
-                        // .forcedUseSystemChooser(false)
-                        .build()
-                        .shareBySystem();
+                if(images.size()==0){
+
+                    new Share(this,titleStr,null,false).share(this,titleStr,titleStr);
+                }
+                else {
+                    new Share(this, titleStr, images.get(0),true).share(this,titleStr,titleStr);
+                }
                 //TODO
                 return true;
             case R.id.favorite:

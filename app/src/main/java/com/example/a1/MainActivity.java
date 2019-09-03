@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener{
     //Fragment Object
 
-
+    int a=0;
 
     private FragmentManager fManager;
     private ArrayList<Fragment> fragments=new ArrayList<>();
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements
         for(int i=0;i<3;i++){
             fragments.add(null);
         }
+        Bridge.setSystemCacheDir(getCacheDir());
         fManager=getSupportFragmentManager();
         BottomNavigationView navView = findViewById(R.id.botNav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
