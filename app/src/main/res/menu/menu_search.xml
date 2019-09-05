@@ -9,8 +9,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/change_user"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="切换用户"
         app:showAsAction="never"/>
 </menu>

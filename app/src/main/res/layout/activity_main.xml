@@ -35,7 +35,7 @@
                     android:layout_marginLeft="180dp"
                     android:textColor="@color/bg_white"
                     android:textSize="18sp"
-                    android:text="新闻"
+                    android:text="旧时闻"
                     />
 
             </androidx.appcompat.widget.Toolbar>
@@ -73,7 +73,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

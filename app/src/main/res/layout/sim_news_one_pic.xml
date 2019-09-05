@@ -13,14 +13,16 @@
             android:id="@+id/textView"
             android:textSize="18sp"
 
-            android:layout_width="300dp"
+            android:layout_width="0dp"
+            android:layout_weight="6"
             android:layout_height="80dp"
             android:textColor="@color/black"
             android:layout_gravity="center"
             />
 
         <ImageView
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="4"
             android:layout_height="80dp"
             android:id="@+id/imageView"
             android:layout_gravity="center"/>
@@ -30,13 +32,13 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@color/black"
         android:text="TextView" />
     <View
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#CCCCCC"
         android:id="@+id/separator"

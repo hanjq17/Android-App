@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -16,10 +17,16 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import cn.jzvd.JzvdStd;
 
 public class SearchPage extends Fragment {
     private Context father;
@@ -29,6 +36,7 @@ public class SearchPage extends Fragment {
     private String keywords;
     private ScrollView scrollView;
     private String lastTime;
+    private ImageLoader imageLoader=ImageLoader.getInstance();
     final int num=10;
     ArrayList<NewsMessage> messages;
     boolean isLoading=true;
@@ -59,17 +67,46 @@ public class SearchPage extends Fragment {
         intent.putExtra("keywords",news.getStringKeyWords());
         intent.putExtra("type","Main");
         intent.putExtra("images",news.getStringImages());
+        intent.putExtra("video",news.getVideo());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         startActivity(intent);
     }
 
     public void addItem(final NewsMessage news){
-        View vw=View.inflate(father,R.layout.sim_news,null);
+        View vw;
+        if(!news.getVideo().equals("")) vw=View.inflate(father,R.layout.sim_news_video,null);
+        else if(news.getImages().size()==0) vw=View.inflate(father,R.layout.sim_news,null);
+        else if(news.getImages().size()>=3) vw=View.inflate(father,R.layout.sim_news_three_pic,null);
+        else vw=View.inflate(father,R.layout.sim_news_one_pic,null);
         TextView title=(TextView)vw.findViewById(R.id.textView);
         TextView othermes=(TextView)vw.findViewById(R.id.textView3);
         title.setText(news.getTitle());
         othermes.setText(news.getPublisher()+" "+news.getTime());
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_launcher_foreground)// 设置图片下载期间显示的图片
+                .showImageForEmptyUri(R.drawable.ic_launcher_foreground)// 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.drawable.ic_launcher_foreground)// 设置图片加载或解码过程中发生错误显示的图片
+                .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
+                .build();// 创建DisplayImageOptions对象
+        if(!news.getVideo().equals("")){
+            JzvdStd jzvdStd = (JzvdStd) vw.findViewById(R.id.jz_video);
+            jzvdStd.setUp(news.getVideo()
+                    , news.getTitle());
+        }
+
+        else if(news.getImages().size()>=3){
+            ImageView pic1=vw.findViewById(R.id.imageView1),pic2=vw.findViewById(R.id.imageView2),pic3=vw.findViewById(R.id.imageView3);
+            imageLoader.displayImage(news.getImages().get(0), pic1, options);
+            imageLoader.displayImage(news.getImages().get(1), pic2, options);
+            imageLoader.displayImage(news.getImages().get(2), pic3, options);
+        }
+        else if(news.getImages().size()>0){
+            ImageView pic1=vw.findViewById(R.id.imageView);
+            imageLoader.displayImage(news.getImages().get(0), pic1, options);
+        }
         if(newsDatabaseManager.existsID(news.getID(),"history")){
             title.setTextColor(Color.GRAY);
             othermes.setTextColor(Color.GRAY);
@@ -89,11 +126,44 @@ public class SearchPage extends Fragment {
     }
 
     public void addItem(final NewsMessage news,final int index){
-        View vw=View.inflate(father,R.layout.sim_news,null);
+        View vw;
+        if(!news.getVideo().equals("")) vw=View.inflate(father,R.layout.sim_news_video,null);
+        else if(news.getImages().size()==0) vw=View.inflate(father,R.layout.sim_news,null);
+        else if(news.getImages().size()>=3) vw=View.inflate(father,R.layout.sim_news_three_pic,null);
+        else vw=View.inflate(father,R.layout.sim_news_one_pic,null);
         TextView title=(TextView)vw.findViewById(R.id.textView);
         TextView othermes=(TextView)vw.findViewById(R.id.textView3);
         title.setText(news.getTitle());
         othermes.setText(news.getPublisher()+" "+news.getTime());
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_launcher_foreground)// 设置图片下载期间显示的图片
+                .showImageForEmptyUri(R.drawable.ic_launcher_foreground)// 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.drawable.ic_launcher_foreground)// 设置图片加载或解码过程中发生错误显示的图片
+                .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
+                .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
+                .build();// 创建DisplayImageOptions对象
+
+        if(!news.getVideo().equals("")){
+            JzvdStd jzvdStd = (JzvdStd) vw.findViewById(R.id.jz_video);
+            jzvdStd.setUp(news.getVideo()
+                    , news.getTitle());
+        }
+
+        else if(news.getImages().size()>=3){
+            ImageView pic1=vw.findViewById(R.id.imageView1),pic2=vw.findViewById(R.id.imageView2),pic3=vw.findViewById(R.id.imageView3);
+            imageLoader.displayImage(news.getImages().get(0), pic1, options);
+            imageLoader.displayImage(news.getImages().get(1), pic2, options);
+            imageLoader.displayImage(news.getImages().get(2), pic3, options);
+        }
+        else if(news.getImages().size()>0){
+            ImageView pic1=vw.findViewById(R.id.imageView);
+            imageLoader.displayImage(news.getImages().get(0), pic1, options);
+        }
+        if(newsDatabaseManager.existsID(news.getID(),"history")){
+            title.setTextColor(Color.GRAY);
+            othermes.setTextColor(Color.GRAY);
+        }
         vw.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

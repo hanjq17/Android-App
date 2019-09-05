@@ -23,6 +23,7 @@ public class NewsMessage {
     private String time;
     private String publisher;
     private String newsID;
+    private String video;
     private ArrayList<String> images=new ArrayList<>();
     private ArrayList<KeyWord> keyWords=new ArrayList<>();
     public NewsMessage(String title,String content,String time,String publisher,String newsID){
@@ -43,7 +44,7 @@ public class NewsMessage {
     }
     public String getPublisher(){return publisher;}
     public String getID(){return newsID;}
-
+    public String getVideo(){return video;}
     public void addKeyword(KeyWord keyWord){
         keyWords.add(keyWord);
     }
@@ -94,5 +95,8 @@ public class NewsMessage {
     }
     public ArrayList<String> getImages(){
         return images;
+    }
+    public void addVideo(String video){
+        this.video=video;
     }
 }

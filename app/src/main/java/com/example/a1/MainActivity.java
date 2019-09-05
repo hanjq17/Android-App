@@ -54,11 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     private FragmentManager fManager;
     private ArrayList<Fragment> fragments=new ArrayList<>();
     private Context mContext;
-    private androidx.appcompat.widget.SearchView.SearchAutoComplete mSearchAutoComplete;
     private NewsDatabaseManager newsDatabaseManager;
-
-    public final static int CHANNELREQUEST = 1; // 请求码
-    public final static int CHANNELRESULT = 10; // 返回码
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 case R.id.navigation_notifications:
                     if(fragments.get(2) == null){
-                        fragments.set(2,new NewsPage(mContext));
+                        fragments.set(2,new MyPage(MainActivity.this));
                         fTransaction.add(R.id.ly_content,fragments.get(2));
                     }else{
                         fTransaction.show(fragments.get(2));
@@ -125,6 +121,17 @@ public class MainActivity extends AppCompatActivity implements
                 return false;
             }
         });
+        MenuItem changeItem = menu.findItem(R.id.change_user);
+        changeItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                newsDatabaseManager.logout();
+                Intent it=new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(it);
+                finish();
+                return false;
+            }
+        });
 
         return true;
     }
@@ -138,6 +145,13 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(tb);
         getSupportActionBar().setTitle("");
         newsDatabaseManager=NewsDatabaseManager.getInstance(this);
+        newsDatabaseManager.setUser();
+        if(NewsDatabaseManager.currentUser.length()==0){
+            Intent intent=new Intent(this,LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         mContext=this;
         for(int i=0;i<3;i++){
             fragments.add(null);
@@ -152,6 +166,10 @@ public class MainActivity extends AppCompatActivity implements
         fTransaction.add(R.id.ly_content,fragments.get(0));
         fTransaction.commit();
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        View tmpv=navigationView.inflateHeaderView(R.layout.nav_header_main);
+        TextView name_text=tmpv.findViewById(R.id.name_header);
+        name_text.setText(NewsDatabaseManager.currentUser);
         navigationView.setNavigationItemSelectedListener(this);
     }
     @Override
@@ -171,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Log.d("qweqweqweqwe","qwe");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

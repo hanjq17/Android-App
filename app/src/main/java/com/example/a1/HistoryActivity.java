@@ -34,6 +34,7 @@ public class HistoryActivity extends AppCompatActivity {
         intent.putExtra("newsID",newsID);
         intent.putExtra("keywords",news.getStringKeyWords());
         intent.putExtra("images",news.getStringImages());
+        intent.putExtra("video",news.getVideo());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         intent.putExtra("type",type);
@@ -75,6 +76,10 @@ public class HistoryActivity extends AppCompatActivity {
         newsDatabaseManager=NewsDatabaseManager.getInstance(this);
         Intent it=getIntent();
         type=it.getStringExtra("type");
+        if(type.equals("favorite")){
+            TextView tv=findViewById(R.id.top_title1);
+            tv.setText("收藏");
+        }
         ArrayList<NewsMessage> all=newsDatabaseManager.selectAll(type);
         l=findViewById(R.id.linear);
         for(NewsMessage tmp:all){

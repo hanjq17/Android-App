@@ -21,6 +21,8 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " lastClickTime Long," +
                 " newsID text," +
                 " images text," +
+                " video test," +
+                " username test," +
                 " keywords text" +
                 ")");
         db.execSQL("create table favorite (" +
@@ -31,22 +33,33 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " lastClickTime Long," +
                 " newsID text," +
                 " images text," +
+                " video test," +
+                " username test," +
                 " keywords text" +
                 ")");
         db.execSQL("create table keywords (" +
+                " username test," +
                 " word text," +
                 " score double" +
                 ")");
         db.execSQL("create table queryhistory (" +
                 " message text," +
                 " times int," +
+                " username test," +
                 " lastQueryTime Long" +
                 ")");
         db.execSQL("create table grid (" +
                 " id int,"+
                 " orderid int,"+
                 " item text,"+
+                " username test," +
                 " status int"+
+                ")");
+        db.execSQL("create table user (" +
+                " username text,"+
+                " password text,"+
+                " lastLogin Long,"+
+                " isLogin int"+
                 ")");
     }
 
@@ -123,6 +136,23 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
             case 8:
                 db.execSQL("alter table history ADD images text");
                 db.execSQL("alter table favorite ADD images text");
+                break;
+            case 9:
+                db.execSQL("alter table history ADD video text");
+                db.execSQL("alter table favorite ADD video text");
+                break;
+            case 10:
+                db.execSQL("create table user (" +
+                        " username text,"+
+                        " password text,"+
+                        " lastLogin Long,"+
+                        " isLogin int"+
+                        ")");
+                db.execSQL("alter table history ADD username text");
+                db.execSQL("alter table queryhistory ADD username text");
+                db.execSQL("alter table grid ADD username text");
+                db.execSQL("alter table keywords ADD username text");
+                db.execSQL("alter table favorite ADD username text");
                 break;
         }
     }

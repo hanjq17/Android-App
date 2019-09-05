@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.ArrayList;
 
+import cn.jzvd.JzvdStd;
 import gdut.bsx.share2.Share2;
 import gdut.bsx.share2.ShareContentType;
 
@@ -31,7 +32,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
 
     private View sim_news;
     private boolean isFav=false;
-    private String newsID,titleStr,contentStr,timeStr,publisherStr,keywordsStr,type;
+    private String newsID,titleStr,contentStr,timeStr,publisherStr,keywordsStr,type,video;
     private ArrayList<String> images=new ArrayList<>();
     private ImageLoader imageLoader=ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -70,6 +71,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         newsID=it.getStringExtra("newsID");
         keywordsStr=it.getStringExtra("keywords");
         type=it.getStringExtra("type");
+        video=it.getStringExtra("video");
         String allImages=it.getStringExtra("images");
         String[] tmpimages=allImages.split("\\|");
         for(String image:tmpimages){
@@ -80,6 +82,12 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         LinearLayout linearLayout=findViewById(R.id.detail_layout);
         String[] contents=contentStr.split("\\n");
         Log.d("contentnum",contents.length+"");
+        if(video.length()>0){
+            View videoView=View.inflate(this,R.layout.detail_video,null);
+            JzvdStd jzvdStd = (JzvdStd) videoView.findViewById(R.id.detail_video_jz);
+            jzvdStd.setUp(video,titleStr);
+            linearLayout.addView(videoView);
+        }
         if(images.size()<=contents.length){
             for(int i=0;i<images.size();i++){
                 View text=View.inflate(this,R.layout.detai_text,null),
@@ -131,6 +139,16 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+        if(!type.equals("Main")) {
+            Intent itnt = new Intent(DetailNews.this, HistoryActivity.class);
+            itnt.putExtra("type", type);
+            startActivity(itnt);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail_news_menu,menu);
         MenuItem it=menu.findItem(R.id.favorite);
@@ -160,6 +178,8 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
                 else{
                     NewsMessage mes=new NewsMessage(titleStr,contentStr,timeStr,publisherStr,newsID);
                     mes.addKeywords(keywordsStr);
+                    mes.addImages(images);
+                    mes.addVideo(video);
                     manager.add(mes,"favorite");
                 }
                 isFav=!isFav;

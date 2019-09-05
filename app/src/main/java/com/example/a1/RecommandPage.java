@@ -65,6 +65,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         intent.putExtra("newsID",newsID);
         intent.putExtra("keywords",news.getStringKeyWords());
         intent.putExtra("type","Main");
+        intent.putExtra("images",news.getStringImages());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         startActivity(intent);

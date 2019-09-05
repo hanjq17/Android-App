@@ -68,8 +68,19 @@ public class NewsFetcher {
                     String publisher=js.getString("publisher");
                     String newsID=js.getString("newsID");
                     String allimages=js.getString("image");
-                    String[] images=allimages.substring(1,allimages.length()-1).split(", ");
+
+                    Log.d("want",allimages.length()+"");
+                    String video=js.getString("video");
+
+
+                    if(allimages.length()!=0&&allimages.charAt(0)=='['){
+                        allimages=allimages.substring(1,allimages.length()-1);
+                    }
+
+
+                    String[] images=allimages.split(", ");
                     NewsMessage newsMessage=new NewsMessage(title,content,time,publisher,newsID);
+                    newsMessage.addVideo(video);
                     for(String image:images) {
                         if(!image.equals(""))
                         newsMessage.addImage(image);

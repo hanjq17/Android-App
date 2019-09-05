@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.Inflater;
 
+import cn.jzvd.JzvdStd;
+
 public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private Context father;
@@ -87,6 +89,7 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         intent.putExtra("keywords",news.getStringKeyWords());
         intent.putExtra("type","Main");
         intent.putExtra("images",news.getStringImages());
+        intent.putExtra("video",news.getVideo());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         startActivity(intent);
@@ -94,7 +97,8 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     public void addItem(final NewsMessage news){
         View vw;
-        if(news.getImages().size()==0) vw=View.inflate(father,R.layout.sim_news,null);
+        if(!news.getVideo().equals("")) vw=View.inflate(father,R.layout.sim_news_video,null);
+        else if(news.getImages().size()==0) vw=View.inflate(father,R.layout.sim_news,null);
         else if(news.getImages().size()>=3) vw=View.inflate(father,R.layout.sim_news_three_pic,null);
         else vw=View.inflate(father,R.layout.sim_news_one_pic,null);
         TextView title=(TextView)vw.findViewById(R.id.textView);
@@ -109,7 +113,12 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
                 .build();// 创建DisplayImageOptions对象
-        if(news.getImages().size()>=3){
+        if(!news.getVideo().equals("")){
+            JzvdStd jzvdStd = (JzvdStd) vw.findViewById(R.id.jz_video);
+            jzvdStd.setUp(news.getVideo(),news.getTitle());
+        }
+
+        else if(news.getImages().size()>=3){
             ImageView pic1=vw.findViewById(R.id.imageView1),pic2=vw.findViewById(R.id.imageView2),pic3=vw.findViewById(R.id.imageView3);
             imageLoader.displayImage(news.getImages().get(0), pic1, options);
             imageLoader.displayImage(news.getImages().get(1), pic2, options);
@@ -139,7 +148,8 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     public void addItem(final NewsMessage news,final int index){
         View vw;
-        if(news.getImages().size()==0) vw=View.inflate(father,R.layout.sim_news,null);
+        if(!news.getVideo().equals("")) vw=View.inflate(father,R.layout.sim_news_video,null);
+        else if(news.getImages().size()==0) vw=View.inflate(father,R.layout.sim_news,null);
         else if(news.getImages().size()>=3) vw=View.inflate(father,R.layout.sim_news_three_pic,null);
         else vw=View.inflate(father,R.layout.sim_news_one_pic,null);
         TextView title=(TextView)vw.findViewById(R.id.textView);
@@ -154,7 +164,14 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
                 .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
                 .build();// 创建DisplayImageOptions对象
-        if(news.getImages().size()>=3){
+
+        if(!news.getVideo().equals("")){
+            JzvdStd jzvdStd = (JzvdStd) vw.findViewById(R.id.jz_video);
+            jzvdStd.setUp(news.getVideo()
+                    , news.getTitle());
+        }
+
+        else if(news.getImages().size()>=3){
             ImageView pic1=vw.findViewById(R.id.imageView1),pic2=vw.findViewById(R.id.imageView2),pic3=vw.findViewById(R.id.imageView3);
             imageLoader.displayImage(news.getImages().get(0), pic1, options);
             imageLoader.displayImage(news.getImages().get(1), pic2, options);
