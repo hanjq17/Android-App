@@ -25,6 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.utils.L;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,9 +46,9 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     private String type;
     private ScrollView scrollView;
     private String lastTime;
+    private ArrayList<NewsMessage> news=new ArrayList<>();
     final int num=10;
     boolean needSet=false;
-    boolean completed=false;
     ArrayList<NewsMessage> messages;
     boolean isLoading=true;
     Toast toast;
@@ -203,7 +204,26 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     public void setUserVisibleHint(boolean isVisibleToUser) {
         Log.d("Position","setUserVisibleHint");
         super.setUserVisibleHint(isVisibleToUser);
-        if(completed) return;
+        if(news.size()>0) {
+            newsList.removeAllViews();
+            ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+            for(String banWord:banWords){
+                Log.d("banword: ",banWord);
+            }
+            boolean visible=true;
+            for(NewsMessage newsMessage:news){
+                visible=true;
+                for(KeyWord keyWord:newsMessage.getKeyWords()){
+                    Log.d("word: ",keyWord.word);
+                    if(banWords.contains(keyWord.word)){
+                        visible=false;
+                        break;
+                    }
+                }
+                if(visible) addItem(newsMessage);
+            }
+            return;
+        }
         if(!isVisibleToUser) return;
         if(newsList==null){
             needSet=true;
@@ -239,10 +259,16 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         public void run() {
                             newsList.removeView(loading);
                             isLoading=false;
+                            ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                            boolean visible;
                             for (int i = 0; i < messages.size(); ++i) {
-                                addItem(messages.get(i));
+                                visible=true;
+                                for(KeyWord keyWord:messages.get(i).getKeyWords()){
+                                    if(banWords.contains(keyWord.word)) visible=false;
+                                }
+                                if(visible)addItem(messages.get(i));
+                                news.add(messages.get(i));
                             }
-                            completed = true;
                         }
                     });
                 }catch(NullPointerException e){
@@ -303,10 +329,16 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                             public void run() {
                                 newsList.removeView(loading);
                                 isLoading=false;
+                                ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                                boolean visible;
                                 for (int i = 0; i < messages.size(); ++i) {
-                                    addItem(messages.get(i));
+                                    visible = true;
+                                    for (KeyWord keyWord : messages.get(i).getKeyWords()) {
+                                        if (banWords.contains(keyWord.word)) visible = false;
+                                    }
+                                    if (visible) addItem(messages.get(i));
+                                    news.add(messages.get(i));
                                 }
-                                completed = true;
                             }
                         });
                     }catch(NullPointerException e){
@@ -356,8 +388,15 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         public void run() {
                             newsList.removeView(loading);
                             isLoading=false;
+                            ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                            boolean visible;
                             for (int i = 0; i < messages.size(); ++i) {
-                                addItem(messages.get(i),i);
+                                visible = true;
+                                for (KeyWord keyWord : messages.get(i).getKeyWords()) {
+                                    if (banWords.contains(keyWord.word)) visible = false;
+                                }
+                                if (visible) addItem(messages.get(i),i);
+                                news.add(i,messages.get(i));
                             }
                             handlerForRefresh.sendEmptyMessage(0x93);
                         }
@@ -404,8 +443,15 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         public void run() {
                             toast.cancel();
                             isLoading=false;
+                            ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                            boolean visible;
                             for (int i = 0; i < messages.size(); ++i) {
-                                addItem(messages.get(i));
+                                visible = true;
+                                for (KeyWord keyWord : messages.get(i).getKeyWords()) {
+                                    if (banWords.contains(keyWord.word)) visible = false;
+                                }
+                                if (visible) addItem(messages.get(i));
+                                news.add(messages.get(i));
                             }
                         }
                     });

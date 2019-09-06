@@ -61,6 +61,11 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " lastLogin Long,"+
                 " isLogin int"+
                 ")");
+        db.execSQL("create table settings(style int,username text)");
+        db.execSQL("create table banWords (" +
+                " username text,"+
+                " banWord text"+
+                ")");
     }
 
     @Override
@@ -154,6 +159,12 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("alter table keywords ADD username text");
                 db.execSQL("alter table favorite ADD username text");
                 break;
+            case 11:
+                db.execSQL("create table settings(style int,username text)");
+                db.execSQL("create table banWords (" +
+                        " username text,"+
+                        " banWord text"+
+                        ")");
         }
     }
 }

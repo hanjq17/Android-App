@@ -29,6 +29,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
     private NewsDatabaseManager newsDatabaseManager;
     private String lastTime;
     private Integer notOverNum;
+    private ArrayList<NewsMessage> news=new ArrayList<>();
     final int num=10;
 
 
@@ -66,6 +67,8 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         intent.putExtra("keywords",news.getStringKeyWords());
         intent.putExtra("type","Main");
         intent.putExtra("images",news.getStringImages());
+        intent.putExtra("video",news.getVideo());
+
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         startActivity(intent);
@@ -113,6 +116,26 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         });
         //TODO
         newsList.addView(vw,index);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(newsList!=null && news.size()>0){
+            newsList.removeAllViews();
+            ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+            boolean visible=true;
+            for(NewsMessage newsMessage:news) {
+                visible = true;
+                for (KeyWord keyWord : newsMessage.getKeyWords()) {
+                    if (banWords.contains(keyWord.word)) {
+                        visible = false;
+                        break;
+                    }
+                }
+                if (visible) addItem(newsMessage);
+            }
+        }
     }
 
     @Override
@@ -171,9 +194,16 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
                                         newsList.removeView(loading);
                                     }
                                 }
+                                ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                                boolean visible;
                                 for (int i = 0; i < messages.size(); ++i) {
                                     synchronized (newsList){
-                                        addItem(messages.get(i));
+                                        visible=true;
+                                        for(KeyWord keyWord:messages.get(i).getKeyWords()){
+                                            if(banWords.contains(keyWord.word)) visible=false;
+                                        }
+                                        if(visible)addItem(messages.get(i));
+                                        news.add(messages.get(i));
                                     }
                                 }
                             }
@@ -241,9 +271,16 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
                                         handlerForRefresh.sendEmptyMessage(0x93);
                                     }
                                 }
+                                ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                                boolean visible;
                                 for (int i = 0; i < messages.size(); ++i) {
                                     synchronized (newsList){
-                                        addItem(messages.get(i),0);
+                                        visible=true;
+                                        for(KeyWord keyWord:messages.get(i).getKeyWords()){
+                                            if(banWords.contains(keyWord.word)) visible=false;
+                                        }
+                                        if(visible)addItem(messages.get(i),0);
+                                        news.add(0,messages.get(i));
                                     }
                                 }
                             }

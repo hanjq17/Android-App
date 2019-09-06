@@ -19,6 +19,7 @@ public class NewsDatabaseManager {
     final int maxNewsNumber=100;
 
     public static String currentUser="";
+    public static int style=0;
 
     public static String getHash(String password){
         /*
@@ -33,7 +34,7 @@ public class NewsDatabaseManager {
 
     private NewsDatabaseManager(Context context) {
         this.context = context;
-        NewsDatabaseHelper dbHelper = new NewsDatabaseHelper(context, 10);
+        NewsDatabaseHelper dbHelper = new NewsDatabaseHelper(context, 11);
         writableDatabase = dbHelper.getWritableDatabase();
     }
 
@@ -131,12 +132,18 @@ public class NewsDatabaseManager {
     }
 
     public ArrayList<KeyWord> selectKeywords(int limit){
-        Cursor cursor = writableDatabase.query("keywords", null, "username = ?", new String[]{currentUser}, null, null, "score desc", limit+"");
+        Cursor cursor = writableDatabase.query("keywords", null, "username = ?", new String[]{currentUser}, null, null, "score desc", null);
         ArrayList<KeyWord> ans=new ArrayList<>();
+        ArrayList<String> banWords=selectBanWords();
+        int num=0;
         while (cursor.moveToNext()){
             String word=cursor.getString(cursor.getColumnIndex("word"));
             double score=cursor.getDouble(cursor.getColumnIndex("score"));
-            ans.add(new KeyWord(word,score));
+            if(!banWords.contains(word)){
+                ans.add(new KeyWord(word,score));
+                num++;
+                if(num==limit) break;
+            }
         }
         return ans;
     }
@@ -268,10 +275,10 @@ public class NewsDatabaseManager {
         writableDatabase.insert("user", null, contentValues);
         return true;
     }
-    public String getlogintime(){
+    public long getlogintime(){
         Cursor cursor = writableDatabase.query("user", null, "username = ? ", new String[]{currentUser}, null, null, null, null);
         cursor.moveToNext();
-        return cursor.getLong(cursor.getColumnIndex("lastLogin"))+"";
+        return cursor.getLong(cursor.getColumnIndex("lastLogin"));
     }
 
     public boolean login(String username,String tmppassword){
@@ -287,6 +294,7 @@ public class NewsDatabaseManager {
         writableDatabase.update("user",contentValues,"username = ?",new String[]{currentUser});
         Cursor cursor1 = writableDatabase.query("grid", null, "username = ?", new String[]{currentUser}, null, null, null, null);
         if(cursor1.getCount()==0) setDefault();
+        getStyle();
         return true;
     }
 
@@ -295,6 +303,7 @@ public class NewsDatabaseManager {
         Cursor cursor = writableDatabase.query("user", null, "isLogin = ?", new String[]{1+""}, null, null, null, null);
         cursor.moveToNext();
         currentUser=cursor.getString(cursor.getColumnIndex("username"));
+        getStyle();
     }
 
     public void logout(){
@@ -302,5 +311,56 @@ public class NewsDatabaseManager {
         contentValues.put("isLogin",0);
         writableDatabase.update("user",contentValues,"username = ?",new String[]{currentUser});
         currentUser="";
+    }
+
+    public void setStyle(int style_to_set){
+        style=style_to_set;
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("style",style);
+        Cursor cursor=writableDatabase.query("settings",null,"username = ?",new String[]{currentUser},null,null,null,null);
+        if(cursor.getCount()==0){
+            contentValues.put("username",currentUser);
+            writableDatabase.insert("settings", null, contentValues);
+        }
+        else{
+            writableDatabase.update("settings",contentValues,"username = ?",new String[]{currentUser});
+        }
+    }
+
+
+    private void getStyle(){
+        if(currentUser.equals("")){
+            style=0;
+            return;
+        }
+        Cursor cursor=writableDatabase.query("settings",null,"username = ?",new String[]{currentUser},null,null,null,null);
+        if(cursor.getCount()==0) setStyle(0);
+        else{
+            cursor.moveToNext();
+            style=cursor.getInt(cursor.getColumnIndex("style"));
+        }
+    }
+
+
+    public void addBanWord(String banWord){
+        Cursor cursor=writableDatabase.query("banWords",null,"username = ? and banWord = ?",new String[]{currentUser,banWord},null,null,null,null);
+        if(cursor.getCount()>0) return;
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("username",currentUser);
+        contentValues.put("banWord",banWord);
+        writableDatabase.insert("banWords", null, contentValues);
+    }
+
+    public void delBanWord(String banWord){
+        writableDatabase.delete("banWords", "banWord = ? and username = ?", new String[]{banWord,currentUser});
+    }
+
+    public ArrayList<String> selectBanWords(){
+        Cursor cursor=writableDatabase.query("banWords",null,"username = ?",new String[]{currentUser},null,null,null,null);
+        ArrayList<String> banWords=new ArrayList<>();
+        while(cursor.moveToNext()){
+            banWords.add(cursor.getString(cursor.getColumnIndex("banWord")));
+        }
+        return banWords;
     }
 }

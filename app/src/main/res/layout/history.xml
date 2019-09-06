@@ -23,7 +23,7 @@
                 android:id="@+id/top_title1"
 
                 android:layout_marginLeft="125dp"
-                android:textColor="@color/bg_white"
+                android:textColor="@color/title_white"
                 android:textSize="18sp"
                 android:text="浏览历史"
                 />

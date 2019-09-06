@@ -24,7 +24,10 @@ public class SplashActivity extends AppCompatActivity {
 
 
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        NewsDatabaseManager.getInstance(this).setUser();
 
+        if(NewsDatabaseManager.style==1) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
 
 

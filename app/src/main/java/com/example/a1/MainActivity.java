@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements
                         fTransaction.add(R.id.ly_content,fragments.get(0));
                     }else{
                         fTransaction.show(fragments.get(0));
+                        fragments.get(0).setUserVisibleHint(true);
                     }
                     fTransaction.commit();
                     return true;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
         //找到SearchView并配置相关参数
+
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -136,11 +138,25 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         MenuItem nightMode = menu.findItem(R.id.night_mode);
+        if(NewsDatabaseManager.style==1){
+            nightMode.setTitle("白天模式");
+        }
+
+
+
         nightMode.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 //TODO
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+                if(NewsDatabaseManager.style==0){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    newsDatabaseManager.setStyle(1);
+                }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    newsDatabaseManager.setStyle(0);
+                }
                 finish();
                 Intent intent=new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -182,8 +198,8 @@ public class MainActivity extends AppCompatActivity implements
         fragments.set(0,new NewsPage(mContext));
         fTransaction.add(R.id.ly_content,fragments.get(0));
         fTransaction.commit();
+        
         NavigationView navigationView = findViewById(R.id.nav_view);
-
         View tmpv=navigationView.inflateHeaderView(R.layout.nav_header_main);
         TextView name_text=tmpv.findViewById(R.id.name_header);
         name_text.setText(NewsDatabaseManager.currentUser);

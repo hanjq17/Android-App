@@ -36,7 +36,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void resetTitles(){
-        Log.d("888","888");
         idOffset+=getCount()+1;
         ArrayList<ChannelItem> selected=newsDatabaseManager.selectItemByStatus(1);
         ArrayList<HomePage> tmp=new ArrayList<>();

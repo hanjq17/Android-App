@@ -1,6 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_white">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mypage_username"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="start"
+        android:text="username"
+
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mypage_logintime"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:layout_gravity="start"
+        android:layout_marginLeft="20dp"
+        android:text="logintime"
+
+
+        />
+    <EditText
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:textColor="@color/black"
+        android:id="@+id/mypage_banword"
+        android:text="输入要屏蔽的关键词"/>
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:id="@+id/mypage_buttonban"
+        android:layout_gravity="center"
+        android:text="确认"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mypage_alreadyban"
+        android:layout_marginTop="20dp"
+
+        android:textColor="@color/black"
+        android:layout_gravity="start"
+        android:layout_marginLeft="20dp"
+        android:text="当前屏蔽的关键词"
+
+
+        />
+
+    <EditText
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:id="@+id/mypage_disbanword"
+        android:text="输入要屏蔽的关键词"
+        />
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:id="@+id/mypage_buttondisban"
+        android:layout_gravity="center"
+        android:text="确认"/>
+
+
+
+
+
+
 
 </LinearLayout>

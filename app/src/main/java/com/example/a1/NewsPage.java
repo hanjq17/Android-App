@@ -34,6 +34,17 @@ public class NewsPage extends Fragment {
         }
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        Log.d("curr: ","666");
+        if(viewPager!=null){
+            Log.d("curr: ",viewPager.getCurrentItem()+"");
+            sectionsPagerAdapter.getItem(viewPager.getCurrentItem()).setUserVisibleHint(true);
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
