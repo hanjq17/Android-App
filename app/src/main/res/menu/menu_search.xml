@@ -13,4 +13,10 @@
         android:orderInCategory="100"
         android:title="切换用户"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/night_mode"
+        android:orderInCategory="100"
+        android:title="夜间模式"
+        app:showAsAction="never"/>
+
 </menu>

@@ -4,18 +4,22 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -50,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements
     //Fragment Object
 
     int a=0;
-
     private FragmentManager fManager;
     private ArrayList<Fragment> fragments=new ArrayList<>();
     private Context mContext;
@@ -132,14 +135,28 @@ public class MainActivity extends AppCompatActivity implements
                 return false;
             }
         });
+        MenuItem nightMode = menu.findItem(R.id.night_mode);
+        nightMode.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                //TODO
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                finish();
+                Intent intent=new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0,0);
+                return false;
+            }
+        });
 
         return true;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
         setContentView(R.layout.activity_main);
         Toolbar tb=findViewById(R.id.toolbar_main);
         setSupportActionBar(tb);

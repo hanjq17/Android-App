@@ -22,7 +22,7 @@
                 android:id="@+id/top_title2"
 
                 android:layout_marginLeft="150dp"
-                android:textColor="@color/bg_white"
+                android:textColor="@color/title_white"
                 android:textSize="18sp"
                 android:text="搜索"
                 />
@@ -36,7 +36,8 @@
 <FrameLayout
     android:id="@+id/search_frame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
 
 

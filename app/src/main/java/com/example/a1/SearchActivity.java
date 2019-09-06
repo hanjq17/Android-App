@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.Nullable;
@@ -35,8 +37,7 @@ public class SearchActivity extends AppCompatActivity {
 
         //找到SearchView并配置相关参数
         MenuItem searchItem = menu.findItem(R.id.real_search1);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
+        mSearchView = (SearchView) searchItem.getActionView();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -46,6 +47,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 if(fragments.get(0)!=null){
                     ((SearchHint)fragments.get(0)).changeSearchText(newText);
                 }
@@ -69,7 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         //设置输入框文字颜色
         EditText editText = (EditText) mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
         editText.setHintTextColor(ContextCompat.getColor(this, R.color.gray));
-        editText.setTextColor(ContextCompat.getColor(this, R.color.bg_white));
+        editText.setTextColor(getResources().getColor( R.color.always_white));
         return super.onCreateOptionsMenu(menu);
     }
 
