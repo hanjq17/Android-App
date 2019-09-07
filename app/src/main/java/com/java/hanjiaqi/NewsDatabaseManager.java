@@ -259,6 +259,7 @@ public class NewsDatabaseManager {
         writableDatabase.delete("favorite", "username = ?", new String[]{currentUser});
         writableDatabase.delete("queryhistory", "username = ?", new String[]{currentUser});
         writableDatabase.delete("keywords", "username = ?", new String[]{currentUser});
+        writableDatabase.delete("banWords", "username = ?", new String[]{currentUser});
         //setDefault();
     }
 
@@ -368,5 +369,9 @@ public class NewsDatabaseManager {
             banWords.add(cursor.getString(cursor.getColumnIndex("banWord")));
         }
         return banWords;
+    }
+
+    public void delAllBanWords(){
+        writableDatabase.delete("banWords","username = ?",new String[]{currentUser});
     }
 }

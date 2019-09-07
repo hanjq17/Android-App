@@ -68,7 +68,17 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         }
     };
 
-    public HomePage(Context context,String type) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(" ResCode",resultCode+"");
+        if(resultCode==1) {
+            Log.d(" ResCode","666");
+            setUserVisibleHint(true);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public HomePage(Context context, String type) {
         father=context;
         this.type=type;
         newsDatabaseManager=NewsDatabaseManager.getInstance(context);
@@ -99,7 +109,7 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         intent.putExtra("url",news.getUrl());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
-        startActivity(intent);
+        startActivityForResult(intent,0);
     }
 
     public void addItem(final NewsMessage news){
@@ -208,7 +218,7 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        Log.d("Position","setUserVisibleHint");
+        Log.d("Res","setUserVisibleHint");
         super.setUserVisibleHint(isVisibleToUser);
         checkConnected();
         if(!connMark)return;

@@ -49,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements
     private FragmentManager fManager;
     private ArrayList<Fragment> fragments=new ArrayList<>();
     private Context mContext;
+    private int currentPage=0;
     private NewsDatabaseManager newsDatabaseManager;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements
                         fTransaction.show(fragments.get(0));
                         fragments.get(0).setUserVisibleHint(true);
                     }
+                    currentPage=0;
                     fTransaction.commit();
                     return true;
                 case R.id.navigation_dashboard:
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements
                         fTransaction.show(fragments.get(1));
                         fragments.get(1).setUserVisibleHint(true);
                     }
+                    currentPage=1;
                     fTransaction.commit();
                     return true;
                 case R.id.navigation_notifications:
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements
                         fTransaction.show(fragments.get(2));
                         fragments.get(2).setUserVisibleHint(true);
                     }
+                    currentPage=2;
                     fTransaction.commit();
                     return true;
             }
@@ -211,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction fTransaction = fManager.beginTransaction();
         hideAllFragment(fTransaction);
         fragments.set(0,new NewsPage(mContext));
+        currentPage=0;
         fTransaction.add(R.id.ly_content,fragments.get(0));
         fTransaction.commit();
         
@@ -253,11 +259,10 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(it);
 
         } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            // 清空缓存
+            newsDatabaseManager.clearMemory();
+            if(fragments.get(currentPage)!=null) fragments.get(currentPage).setUserVisibleHint(true);
+            Toast.makeText(this,"缓存已清空！",Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

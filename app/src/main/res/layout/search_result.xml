@@ -21,6 +21,7 @@ android:layout_height="match_parent"
         android:layout_height="wrap_content"
         android:text="Loading . . ."
         android:layout_gravity="center"
+        android:textColor="@color/black"
         />
 </LinearLayout>
 </ScrollView>

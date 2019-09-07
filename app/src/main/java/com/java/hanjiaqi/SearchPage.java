@@ -105,7 +105,7 @@ public class SearchPage extends Fragment {
         intent.putExtra("content",news.getContent());
         intent.putExtra("newsID",newsID);
         intent.putExtra("keywords",news.getStringKeyWords());
-        intent.putExtra("type","Main");
+        intent.putExtra("type","Search");
         intent.putExtra("images",news.getStringImages());
         intent.putExtra("video",news.getVideo());
         intent.putExtra("url",news.getUrl());

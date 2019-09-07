@@ -9,8 +9,5 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/real_action_settings"
-        android:title="actiontitile"
-        app:showAsAction="never"/>
+
 </menu>

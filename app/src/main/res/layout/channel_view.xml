@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/top_title3"
 
-                android:layout_marginLeft="125dp"
                 android:textColor="@color/bg_white"
                 android:textSize="18sp"
                 android:text="分类修改"

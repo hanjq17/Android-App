@@ -147,13 +147,13 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
 
 
         mTts = SpeechSynthesizer.createSynthesizer( this, null);
-        /*mTts.setParameter(ResourceUtil.TTS_RES_PATH,getResourcePath());
+        mTts.setParameter(ResourceUtil.TTS_RES_PATH,getResourcePath());
         mTts.setParameter(SpeechConstant. VOICE_NAME, "xiaoyan" ); // 设置发音人
         mTts.setParameter(SpeechConstant. SPEED, "50" );// 设置语速
         mTts.setParameter(SpeechConstant. VOLUME, "80" );// 设置音量，范围 0~100
         mTts.setParameter(SpeechConstant. ENGINE_TYPE, SpeechConstant. TYPE_CLOUD); //设置云端
         mTts.setParameter(SpeechConstant.SAMPLE_RATE,"8000");
-        mTts.setParameter(SpeechConstant. TTS_AUDIO_PATH, "./sdcard/iflytek.pcm" );*/
+        mTts.setParameter(SpeechConstant. TTS_AUDIO_PATH, "./sdcard/iflytek.pcm" );
         Toolbar tb=findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle("新闻详情");
@@ -162,8 +162,6 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         TextView title=(TextView)findViewById(R.id.detail_title);
         title.setText(titleStr);
         contentStr=((Intent) it).getStringExtra("content");
-        //TextView content=(TextView)findViewById(R.id.detail_content);
-        //content.setText(contentStr);
         timeStr=((Intent) it).getStringExtra("time");
         publisherStr=((Intent) it).getStringExtra("publisher");
         TextView message=(TextView)findViewById(R.id.detail_message);
@@ -183,6 +181,11 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         Log.d("imagenum",images.size()+"");
         LinearLayout linearLayout=findViewById(R.id.detail_layout);
         String[] contents=contentStr.split("\\n");
+        StringBuilder stringBuilder=new StringBuilder();
+        for(String string:contents){
+            if(string.length()>0) stringBuilder.append(string+"\n");
+        }
+        contents=stringBuilder.toString().split("\\n");
         Log.d("contentnum",contents.length+"");
         if(video.length()>0){
             View videoView=View.inflate(this,R.layout.detail_video,null);
@@ -227,13 +230,17 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         tb.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                //if(mTts.isSpeaking())mTts.stopSpeaking();
-                if(!type.equals("Main")) {
+                if(mTts.isSpeaking())mTts.stopSpeaking();
+                if(type.equals("history") || type.equals("favorite")) {
                     Intent itnt = new Intent(DetailNews.this, HistoryActivity.class);
                     itnt.putExtra("type", type);
                     startActivity(itnt);
                 }
+                else if(type.equals("Main")){
+                    Log.d("SetRes","111");
+                    setResult(1);
+                }
+                finish();
             }
         });
 
@@ -243,13 +250,16 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onBackPressed() {
-        finish();
-        //if(mTts.isSpeaking())mTts.stopSpeaking();
-        if(!type.equals("Main")) {
+        if(mTts.isSpeaking())mTts.stopSpeaking();
+        if(type.equals("history") || type.equals("favorite")) {
             Intent itnt = new Intent(DetailNews.this, HistoryActivity.class);
             itnt.putExtra("type", type);
             startActivity(itnt);
         }
+        else if(type.equals("Main")){
+            setResult(1);
+        }
+        finish();
 
     }
 

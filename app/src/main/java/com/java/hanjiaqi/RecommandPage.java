@@ -44,7 +44,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
     private ArrayList<NewsMessage> news=new ArrayList<>();
     private ScrollView scrollView;
     private ImageLoader imageLoader=ImageLoader.getInstance();
-    private boolean isLoading=false;
+    private boolean isLoading=true;
     private View disconnectView;
     private Toast toast;
     private boolean connMark=true;
@@ -116,6 +116,12 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==1) setUserVisibleHint(true);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void startDetailNews(NewsMessage news){
         String newsID=news.getID();
         if(newsDatabaseManager.existsID(newsID,"history")) {
@@ -138,7 +144,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         intent.putExtra("url",news.getUrl());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
-        startActivity(intent);
+        startActivityForResult(intent,0);
     }
 
     public void addItem(final NewsMessage news){
@@ -334,6 +340,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
                                 synchronized (notOverNum){
                                     notOverNum--;
                                     if(notOverNum==0){
+                                        isLoading=false;
                                         newsList.removeView(loading);
                                     }
                                 }

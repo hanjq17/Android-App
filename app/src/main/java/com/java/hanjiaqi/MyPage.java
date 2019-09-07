@@ -69,6 +69,14 @@ public class MyPage extends Fragment {
                 //modify tv2 dis add  this word
             }
         });
+        Button clearbutton=view.findViewById(R.id.mypage_clearall);
+        clearbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newsDatabaseManager.delAllBanWords();
+                tv2.setText("当前屏蔽的关键词：\n"+String.join(",",newsDatabaseManager.selectBanWords()));
+            }
+        });
 
 
 
