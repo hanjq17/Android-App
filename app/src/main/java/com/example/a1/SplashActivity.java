@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
+
 import java.io.File;
 
 public class SplashActivity extends AppCompatActivity {
@@ -22,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-
+        SpeechUtility.createUtility(this, SpeechConstant.APPID +"=5d734791,"+SpeechConstant.ENGINE_MODE+"="+SpeechConstant.MODE_MSC);
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         NewsDatabaseManager.getInstance(this).setUser();
 

@@ -6,4 +6,7 @@
 <item android:id="@+id/favorite"
     android:title="收藏"
     />
+    <item android:id="@+id/speak"
+        android:title="朗读"
+        />
 </menu>

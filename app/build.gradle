@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+
+
+
 android {
     compileOptions {
 
@@ -20,6 +23,11 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
         }
     }
     compileSdkVersion 29

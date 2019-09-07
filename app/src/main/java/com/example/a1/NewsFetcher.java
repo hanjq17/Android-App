@@ -40,8 +40,8 @@ public class NewsFetcher {
             //GET 方式，不需要使用输出流
             httpURLConnection.setDoOutput(false);
             //设置超时
-            httpURLConnection.setConnectTimeout(1000);
-            httpURLConnection.setReadTimeout(2000);
+            httpURLConnection.setConnectTimeout(10000);
+            httpURLConnection.setReadTimeout(10000);
             //连接
             Log.d("A","D");
             httpURLConnection.connect();

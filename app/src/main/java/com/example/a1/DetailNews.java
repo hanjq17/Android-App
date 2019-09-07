@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,23 +13,34 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
+import com.iflytek.cloud.util.ResourceUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cn.jzvd.JzvdStd;
 import gdut.bsx.share2.Share2;
 import gdut.bsx.share2.ShareContentType;
 
-public class DetailNews extends AppCompatActivity implements View.OnClickListener {
+
+
+
+
+public class DetailNews extends AppCompatActivity implements View.OnClickListener{
 
     private View sim_news;
     private boolean isFav=false;
@@ -43,6 +55,82 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
             .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
             .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
             .build();// 创建DisplayImageOptions对象
+    private SpeechSynthesizer mTts;
+
+
+
+
+    class MySynthesizerListener implements SynthesizerListener {
+
+        @Override
+        public void onSpeakBegin() {
+            showTip(" 开始播放 ");
+        }
+
+        @Override
+        public void onSpeakPaused() {
+            showTip(" 暂停播放 ");
+        }
+
+        @Override
+        public void onSpeakResumed() {
+            showTip(" 继续播放 ");
+        }
+
+        @Override
+        public void onBufferProgress(int percent, int beginPos, int endPos ,
+                                     String info) {
+            // 合成进度
+        }
+
+        @Override
+        public void onSpeakProgress(int percent, int beginPos, int endPos) {
+            // 播放进度
+        }
+
+        @Override
+        public void onCompleted(SpeechError error) {
+            if (error == null) {
+                showTip("播放完成 ");
+            } else if (error != null ) {
+                showTip(error.getPlainDescription( true));
+            }
+        }
+
+        @Override
+        public void onEvent(int eventType, int arg1 , int arg2, Bundle obj) {
+            // 以下代码用于获取与云端的会话 id，当业务出错时将会话 id提供给技术支持人员，可用于查询会话日志，定位出错原因
+            // 若使用本地能力，会话 id为null
+            //if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+            //     String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+            //     Log.d(TAG, "session id =" + sid);
+            //}
+        }
+
+
+    }
+
+    private void showTip (String data) {
+        Toast.makeText( this, data, Toast.LENGTH_SHORT).show() ;
+    }
+
+    private String getResourcePath(){
+        StringBuffer tempBuffer = new StringBuffer();
+        //合成通用资源
+        tempBuffer.append(ResourceUtil.generateResourcePath(this, ResourceUtil.RESOURCE_TYPE.assets, "tts/common.jet"));
+        tempBuffer.append(";");
+        //发音人资源
+        tempBuffer.append(ResourceUtil.generateResourcePath(this, ResourceUtil.RESOURCE_TYPE.assets, "tts/xiaoyan.jet"));
+        return tempBuffer.toString();
+    }
+
+
+
+
+
+
+
+
     @Override
     public void onClick(View view) {
 
@@ -51,8 +139,18 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.detail_news);
+
+
+
+        mTts = SpeechSynthesizer.createSynthesizer( this, null);
+        mTts.setParameter(ResourceUtil.TTS_RES_PATH,getResourcePath());
+        mTts.setParameter(SpeechConstant. VOICE_NAME, "xiaoyan" ); // 设置发音人
+        mTts.setParameter(SpeechConstant. SPEED, "50" );// 设置语速
+        mTts.setParameter(SpeechConstant. VOLUME, "80" );// 设置音量，范围 0~100
+        mTts.setParameter(SpeechConstant. ENGINE_TYPE, SpeechConstant. TYPE_CLOUD); //设置云端
+        mTts.setParameter(SpeechConstant.SAMPLE_RATE,"8000");
+        mTts.setParameter(SpeechConstant. TTS_AUDIO_PATH, "./sdcard/iflytek.pcm" );
         Toolbar tb=findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle("");
@@ -126,6 +224,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 finish();
+                if(mTts.isSpeaking())mTts.stopSpeaking();
                 if(!type.equals("Main")) {
                     Intent itnt = new Intent(DetailNews.this, HistoryActivity.class);
                     itnt.putExtra("type", type);
@@ -141,6 +240,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onBackPressed() {
         finish();
+        if(mTts.isSpeaking())mTts.stopSpeaking();
         if(!type.equals("Main")) {
             Intent itnt = new Intent(DetailNews.this, HistoryActivity.class);
             itnt.putExtra("type", type);
@@ -186,6 +286,18 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
                 if(isFav)item.setTitle("取消收藏");
                 else item.setTitle("收藏");
                 return true;
+            case R.id.speak:
+                //Log.d("speak","123123123");
+                if(mTts.isSpeaking()){
+                    mTts.stopSpeaking();
+                    item.setTitle("朗读");
+                }
+                else{
+                    item.setTitle("结束");
+                    mTts.startSpeaking( titleStr+"。"+contentStr, new MySynthesizerListener());
+                }
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
