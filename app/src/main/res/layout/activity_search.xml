@@ -16,16 +16,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.AppBarOverlay"
             app:navigationIcon="@drawable/ic_arrow_back_black_24dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/top_title2"
 
-                android:layout_marginLeft="150dp"
-                android:textColor="@color/title_white"
-                android:textSize="18sp"
-                android:text="搜索"
-                />
 
         </androidx.appcompat.widget.Toolbar>
 

@@ -9,6 +9,6 @@
         android:layout_gravity="center"
         android:textColor="@color/black"
         android:gravity="center"
-        android:text="网络连接断开" />
+        android:text="网络连接断开\n\n\n要下拉刷新呦" />
 
 </LinearLayout>

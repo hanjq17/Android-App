@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_white">
+    android:background="@mipmap/bg2">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,8 @@
         android:layout_marginRight="50dp"
         android:textColor="@color/black"
         android:id="@+id/mypage_banword"
-        android:text="输入要屏蔽的关键词"/>
+        android:hint="输入要屏蔽的关键词"
+        android:textColorHint="@color/gray"/>
     <Button
         android:layout_marginTop="50dp"
         android:layout_width="100dp"
@@ -45,6 +46,7 @@
         android:textColor="@color/black"
         android:id="@+id/mypage_buttonban"
         android:layout_gravity="center"
+        android:background="@color/my_button"
         android:text="确认"/>
     <TextView
         android:layout_width="match_parent"
@@ -69,7 +71,8 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:id="@+id/mypage_disbanword"
-        android:text="输入要屏蔽的关键词"
+        android:hint="输入要屏蔽的关键词"
+        android:textColorHint="@color/gray"
         />
     <Button
         android:layout_marginTop="50dp"
@@ -78,6 +81,7 @@
         android:textColor="@color/black"
         android:id="@+id/mypage_buttondisban"
         android:layout_gravity="center"
+        android:background="@color/my_button"
         android:text="确认"/>
 
 

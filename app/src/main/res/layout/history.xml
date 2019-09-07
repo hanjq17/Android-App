@@ -18,16 +18,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.AppBarOverlay"
             app:navigationIcon="@drawable/ic_arrow_back_black_24dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/top_title1"
 
-                android:layout_marginLeft="125dp"
-                android:textColor="@color/title_white"
-                android:textSize="18sp"
-                android:text="浏览历史"
-                />
 
         </androidx.appcompat.widget.Toolbar>
 

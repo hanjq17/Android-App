@@ -11,4 +11,5 @@
     <color name="title_white">#FFFFFF</color>
     <color name="bot_color"> #333333</color>
     <color name="always_white">#FFFFFF</color>
+    <color name="my_button">#333333</color>
 </resources>

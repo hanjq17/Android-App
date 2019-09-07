@@ -9,4 +9,7 @@
     <item android:id="@+id/speak"
         android:title="朗读"
         />
+    <item android:id="@+id/dislike"
+        android:title="屏蔽"
+        />
 </menu>
