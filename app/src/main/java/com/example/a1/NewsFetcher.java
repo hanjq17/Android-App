@@ -7,10 +7,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 public class NewsFetcher {
 
@@ -37,8 +40,8 @@ public class NewsFetcher {
             //GET 方式，不需要使用输出流
             httpURLConnection.setDoOutput(false);
             //设置超时
-            httpURLConnection.setConnectTimeout(10000);
-            httpURLConnection.setReadTimeout(10000);
+            httpURLConnection.setConnectTimeout(1000);
+            httpURLConnection.setReadTimeout(2000);
             //连接
             Log.d("A","D");
             httpURLConnection.connect();
@@ -98,9 +101,11 @@ public class NewsFetcher {
             }catch(Exception e){
                 e.printStackTrace();
             }
-            bufferedReader.close();
+            try {
+                bufferedReader.close();
+            }catch (Exception e){}
             httpURLConnection.disconnect();
-        } catch (Exception e) {
+        }catch (Exception e){
             Log.d("qwqwq","wwqwwq");
             e.printStackTrace();
         }

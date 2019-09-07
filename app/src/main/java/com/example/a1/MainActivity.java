@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.media.SoundPool;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,7 +53,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener{
     //Fragment Object
-
+    static SoundPool soundPool;
+    static int soundID;
     int a=0;
     private FragmentManager fManager;
     private ArrayList<Fragment> fragments=new ArrayList<>();
@@ -171,9 +173,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         setContentView(R.layout.activity_main);
+        soundPool=new SoundPool.Builder().build();
+        soundID=soundPool.load(this,R.raw.testsong,1);
+
         Toolbar tb=findViewById(R.id.toolbar_main);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle("");

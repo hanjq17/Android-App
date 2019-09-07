@@ -3,6 +3,8 @@ package com.example.a1;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -49,9 +51,11 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     private ArrayList<NewsMessage> news=new ArrayList<>();
     final int num=10;
     boolean needSet=false;
-    ArrayList<NewsMessage> messages;
+    private ArrayList<NewsMessage> messages;
     boolean isLoading=true;
-    Toast toast;
+    private Toast toast;
+    private View disconnectView;
+    private boolean connMark=true;
 
     Handler handlerForRefresh = new Handler() {
         @Override
@@ -70,6 +74,7 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         newsDatabaseManager=NewsDatabaseManager.getInstance(context);
         imageLoader=ImageLoader.getInstance();
         toast=Toast.makeText(father,"Loading",Toast.LENGTH_SHORT);
+        disconnectView=View.inflate(context,R.layout.disconnect,null);
     }
 
     public void startDetailNews(NewsMessage news){
@@ -204,6 +209,8 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     public void setUserVisibleHint(boolean isVisibleToUser) {
         Log.d("Position","setUserVisibleHint");
         super.setUserVisibleHint(isVisibleToUser);
+        checkConnected();
+        if(!connMark)return;
         if(news.size()>0) {
             newsList.removeAllViews();
             ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
@@ -299,7 +306,8 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 return false;
             }
         });
-        if(needSet){
+        checkConnected();
+        if(needSet && connMark){
             Thread thread=new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -353,10 +361,30 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     @Override
     public void onRefresh() {
+
         if(isLoading==true) {
             handlerForRefresh.sendEmptyMessage(0x93);
             return;
         }
+        checkConnected();
+        if(!connMark){
+            handlerForRefresh.sendEmptyMessage(0x93);
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.soundPool.play(
+                        MainActivity.soundID,
+                        0.5f,
+                        0.5f,
+                        0,
+                        0,
+                        1
+                );
+            }
+        }).start();
+
         newsList.addView(loading,0);
         isLoading=true;
         Thread thread=new Thread(new Runnable() {
@@ -386,6 +414,14 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
+
+
+
+
+
+
+
                             newsList.removeView(loading);
                             isLoading=false;
                             ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
@@ -409,10 +445,60 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         thread.start();
     }
 
+
+    private boolean isConnected(){
+        if (father != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) father.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null && mNetworkInfo.isConnected()) {
+                return true;//有网
+            }
+        }
+        return false;
+    }
+
+
+    private void checkConnected(){
+        if(newsList==null) return;
+        Log.d("NetInfo: ",isConnected()+"");
+        if(!isConnected()){
+            Log.d("NetInfo: ","disconnected");
+            newsList.removeAllViews();
+            newsList.addView(disconnectView);
+            connMark=false;
+            isLoading=false;
+        }
+        else if(!connMark){
+            connMark=true;
+            newsList.removeAllViews();
+            if(news.size()>0) {
+                ArrayList<String> banWords=newsDatabaseManager.selectBanWords();
+                for(String banWord:banWords){
+                    Log.d("banword: ",banWord);
+                }
+                boolean visible=true;
+                for(NewsMessage newsMessage:news){
+                    visible=true;
+                    for(KeyWord keyWord:newsMessage.getKeyWords()){
+                        Log.d("word: ",keyWord.word);
+                        if(banWords.contains(keyWord.word)){
+                            visible=false;
+                            break;
+                        }
+                    }
+                    if(visible) addItem(newsMessage);
+                }
+                return;
+            }
+        }
+    }
+
     public void bottomRefresh() {
         if(isLoading==true) return;
         toast.show();
         isLoading=true;
+        checkConnected();
+        if(!connMark)return;
         scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         Thread thread=new Thread(new Runnable() {
             @Override

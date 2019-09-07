@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_white"
     >
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -39,7 +40,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbar_his">
+        android:layout_below="@id/appbar_his"
+        android:background="@color/bg_white">
         <LinearLayout
             android:orientation="vertical" android:layout_width="match_parent"
             android:layout_height="wrap_content"

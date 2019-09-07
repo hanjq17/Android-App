@@ -301,8 +301,11 @@ public class NewsDatabaseManager {
 
     public void setUser(){
         Cursor cursor = writableDatabase.query("user", null, "isLogin = ?", new String[]{1+""}, null, null, null, null);
-        cursor.moveToNext();
-        currentUser=cursor.getString(cursor.getColumnIndex("username"));
+        if(cursor.getCount()==0) currentUser="";
+        else {
+            cursor.moveToNext();
+            currentUser = cursor.getString(cursor.getColumnIndex("username"));
+        }
         getStyle();
     }
 
