@@ -24,6 +24,7 @@ public class NewsMessage {
     private String publisher;
     private String newsID;
     private String video;
+    private String url;
     private ArrayList<String> images=new ArrayList<>();
     private ArrayList<KeyWord> keyWords=new ArrayList<>();
     public NewsMessage(String title,String content,String time,String publisher,String newsID){
@@ -33,6 +34,11 @@ public class NewsMessage {
         this.publisher=publisher;
         this.newsID=newsID;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
     public String getTitle(){
         return title;
     }
@@ -98,5 +104,8 @@ public class NewsMessage {
     }
     public void addVideo(String video){
         this.video=video;
+    }
+    public void addUrl(String url){
+        this.url=url;
     }
 }

@@ -74,7 +74,7 @@ public class NewsFetcher {
 
                     Log.d("want",allimages.length()+"");
                     String video=js.getString("video");
-
+                    String newsurl=js.getString("url");
 
                     if(allimages.length()!=0&&allimages.charAt(0)=='['){
                         allimages=allimages.substring(1,allimages.length()-1);
@@ -84,6 +84,7 @@ public class NewsFetcher {
                     String[] images=allimages.split(", ");
                     NewsMessage newsMessage=new NewsMessage(title,content,time,publisher,newsID);
                     newsMessage.addVideo(video);
+                    newsMessage.addUrl(newsurl);
                     for(String image:images) {
                         if(!image.equals(""))
                         newsMessage.addImage(image);

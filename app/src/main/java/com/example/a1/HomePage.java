@@ -96,6 +96,7 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         intent.putExtra("type","Main");
         intent.putExtra("images",news.getStringImages());
         intent.putExtra("video",news.getVideo());
+        intent.putExtra("url",news.getUrl());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         startActivity(intent);

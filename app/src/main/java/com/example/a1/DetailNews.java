@@ -28,6 +28,9 @@ import com.iflytek.cloud.util.ResourceUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.xyzlf.share.library.bean.ShareEntity;
+import com.xyzlf.share.library.interfaces.ShareConstant;
+import com.xyzlf.share.library.util.ShareUtil;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -44,7 +47,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
 
     private View sim_news;
     private boolean isFav=false;
-    private String newsID,titleStr,contentStr,timeStr,publisherStr,keywordsStr,type,video;
+    private String newsID,titleStr,contentStr,timeStr,publisherStr,keywordsStr,type,video,url;
     private ArrayList<String> images=new ArrayList<>();
     private ImageLoader imageLoader=ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -170,6 +173,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         keywordsStr=it.getStringExtra("keywords");
         type=it.getStringExtra("type");
         video=it.getStringExtra("video");
+        url=it.getStringExtra("url");
         String allImages=it.getStringExtra("images");
         String[] tmpimages=allImages.split("\\|");
         for(String image:tmpimages){
@@ -261,13 +265,15 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
         int id=item.getItemId();
         switch (id){
             case R.id.share:
-                if(images.size()==0){
 
-                    new Share(this,titleStr,null,false).share(this,titleStr,titleStr);
-                }
-                else {
-                    new Share(this, titleStr, images.get(0),true).share(this,titleStr,titleStr);
-                }
+                ShareEntity testBean = new ShareEntity(titleStr, titleStr);
+                testBean.setUrl(url); //分享链接
+                if(images.size()!=0) testBean.setImgUrl(images.get(0));
+                ShareUtil.showShareDialog(this,  testBean, ShareConstant.REQUEST_CODE);
+
+
+
+
                 //TODO
                 return true;
             case R.id.favorite:

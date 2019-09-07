@@ -23,7 +23,8 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " images text," +
                 " video test," +
                 " username test," +
-                " keywords text" +
+                " keywords text," +
+                " url text" +
                 ")");
         db.execSQL("create table favorite (" +
                 " title text," +
@@ -35,7 +36,8 @@ public class NewsDatabaseHelper extends SQLiteOpenHelper {
                 " images text," +
                 " video test," +
                 " username test," +
-                " keywords text" +
+                " keywords text," +
+                " url text" +
                 ")");
         db.execSQL("create table keywords (" +
                 " username test," +

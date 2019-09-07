@@ -68,6 +68,7 @@ public class SearchPage extends Fragment {
         intent.putExtra("type","Main");
         intent.putExtra("images",news.getStringImages());
         intent.putExtra("video",news.getVideo());
+        intent.putExtra("url",news.getUrl());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         startActivity(intent);

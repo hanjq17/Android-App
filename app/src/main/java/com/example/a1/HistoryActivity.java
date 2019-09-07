@@ -35,6 +35,7 @@ public class HistoryActivity extends AppCompatActivity {
         intent.putExtra("keywords",news.getStringKeyWords());
         intent.putExtra("images",news.getStringImages());
         intent.putExtra("video",news.getVideo());
+        intent.putExtra("url",news.getUrl());
         if(newsDatabaseManager.existsID(newsID,"favorite")) intent.putExtra("favorite",true);
         else intent.putExtra("favorite",false);
         intent.putExtra("type",type);

@@ -59,6 +59,7 @@ public class NewsDatabaseManager {
         contentValues.put("newsID",news.getID());
         contentValues.put("images",news.getStringImages());
         contentValues.put("video",news.getVideo());
+        contentValues.put("url",news.getUrl());
         contentValues.put("username",currentUser);
         ArrayList<KeyWord> keyWords=news.getKeyWords();
         StringBuilder allKeywords=new StringBuilder();
@@ -94,10 +95,12 @@ public class NewsDatabaseManager {
             String allimages=cursor.getString(cursor.getColumnIndex("images"));
             String newsID=cursor.getString(cursor.getColumnIndex("newsID"));
             String video=cursor.getString(cursor.getColumnIndex("video"));
+            String url=cursor.getString(cursor.getColumnIndex("url"));
             NewsMessage mes=new NewsMessage(title,content,time,publisher,newsID);
             mes.addKeywords(allkeywords);
             mes.addImages(allimages);
             mes.addVideo(video);
+            mes.addUrl(url);
             messages.add(mes);
         }
         return messages;
