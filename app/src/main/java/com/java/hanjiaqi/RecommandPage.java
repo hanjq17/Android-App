@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import cn.jzvd.JzvdStd;
 
@@ -39,7 +40,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
     private TextView loading;
     private SwipeRefreshLayout swipeRefreshLayout;
     private NewsDatabaseManager newsDatabaseManager;
-    private String lastTime;
+    //private String lastTime;
     private Integer notOverNum;
     private ArrayList<NewsMessage> news=new ArrayList<>();
     private ScrollView scrollView;
@@ -49,6 +50,7 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
     private Toast toast;
     private boolean connMark=true;
     final int num=10;
+    private HashMap<String,String> lasttime=new HashMap<>();
 
 
     Handler handlerForRefresh = new Handler() {
@@ -296,11 +298,15 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         checkConnected();
         if(!connMark) return view;
         final SimpleDateFormat tmp=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(lastTime==null) lastTime=tmp.format(new Date());
+        //if(lastTime==null) lastTime=tmp.format(new Date());
         final ArrayList<String> urls=new ArrayList<>();
-        ArrayList<KeyWord> keyWords=newsDatabaseManager.selectKeywords(3);
+        final ArrayList<KeyWord> keyWords=newsDatabaseManager.selectKeywords(3);
         if(keyWords.size()==0){
-            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size=10&endDate="+lastTime);
+            if(lasttime.get("")==null){
+                lasttime.put("",tmp.format(new Date()));
+            }
+            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size=10&endDate="+lasttime.get(""));
+            keyWords.add(new KeyWord("",1));
         }
         else{
             double sum=0.0;
@@ -308,29 +314,36 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
             int num=10;
             for(int i=0;i<keyWords.size()-1;i++){
                 int size=(int)(10*keyWords.get(i).score/sum);num-=size;
-                urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+size+"&endDate="+lastTime+"&words="+keyWords.get(i).word);
+                if(lasttime.get(keyWords.get(i).word)==null){
+                    lasttime.put(keyWords.get(i).word,tmp.format(new Date()));
+                }
+                urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+size+"&endDate="+lasttime.get(keyWords.get(i).word)+"&words="+keyWords.get(i).word);
             }
-            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+num+"&endDate="+lastTime+"&words="+keyWords.get(keyWords.size()-1).word);
+            if(lasttime.get(keyWords.get(keyWords.size()-1).word)==null){
+                lasttime.put(keyWords.get(keyWords.size()-1).word,tmp.format(new Date()));
+            }
+            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+num+"&endDate="+lasttime.get(keyWords.get(keyWords.size()-1).word)+"&words="+keyWords.get(keyWords.size()-1).word);
         }
         notOverNum=urls.size();
         for(int i=0;i<urls.size();i++){
             final String url=urls.get(i);
+            final String tmpkw=keyWords.get(i).word;
             Thread thread=new Thread(new Runnable() {
                 @Override
                 public void run() {
                     NewsFetcher fetcher=new NewsFetcher();
                     final ArrayList<NewsMessage> messages=fetcher.getNews(url);
                     for(NewsMessage mes:messages){
-                        synchronized (lastTime) {
-                            if(mes.getTime().compareTo(lastTime)<0){
-                                lastTime = mes.getTime();
+                        synchronized (lasttime) {
+                            if(mes.getTime().compareTo(lasttime.get(tmpkw))<0){
+                                lasttime.put(tmpkw,mes.getTime());
                             }
                         }
                     }
                     try {
-                        Date dt=tmp.parse(lastTime);
+                        Date dt=tmp.parse(lasttime.get(tmpkw));
                         dt.setTime(dt.getTime()-1000);
-                        lastTime=tmp.format(dt);
+                        lasttime.put(tmpkw,tmp.format(dt));
                     } catch (ParseException e) {
                     }
                     try {
@@ -348,6 +361,14 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
                                 boolean visible;
                                 for (int i = 0; i < messages.size(); ++i) {
                                     synchronized (newsList){
+                                        boolean duplicated=false;
+                                        for(NewsMessage newsMessage:news){
+                                            if(newsMessage.getTitle().equals(messages.get(i).getTitle())){
+                                                duplicated=true;
+                                                break;
+                                            }
+                                        }
+                                        if(duplicated) continue;
                                         visible=true;
                                         for(KeyWord keyWord:messages.get(i).getKeyWords()){
                                             if(banWords.contains(keyWord.word)) visible=false;
@@ -396,11 +417,14 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         newsList.addView(loading,0);
         isLoading=true;
         final SimpleDateFormat tmp=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(lastTime==null) lastTime=tmp.format(new Date());
         final ArrayList<String> urls=new ArrayList<>();
-        ArrayList<KeyWord> keyWords=newsDatabaseManager.selectKeywords(3);
+        final ArrayList<KeyWord> keyWords=newsDatabaseManager.selectKeywords(3);
         if(keyWords.size()==0){
-            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size=10&endDate="+lastTime);
+            if(lasttime.get("")==null){
+                lasttime.put("",tmp.format(new Date()));
+            }
+            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size=10&endDate="+lasttime.get(""));
+            keyWords.add(new KeyWord("",1));
         }
         else{
             double sum=0.0;
@@ -408,30 +432,36 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
             int num=10;
             for(int i=0;i<keyWords.size()-1;i++){
                 int size=(int)(10*keyWords.get(i).score/sum);num-=size;
-                urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+size+"&endDate="+lastTime+"&words="+keyWords.get(i).word);
+                if(lasttime.get(keyWords.get(i).word)==null){
+                    lasttime.put(keyWords.get(i).word,tmp.format(new Date()));
+                }
+                urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+size+"&endDate="+lasttime.get(keyWords.get(i).word)+"&words="+keyWords.get(i).word);
             }
-            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+num+"&endDate="+lastTime+"&words="+keyWords.get(keyWords.size()-1).word);
-
+            if(lasttime.get(keyWords.get(keyWords.size()-1).word)==null){
+                lasttime.put(keyWords.get(keyWords.size()-1).word,tmp.format(new Date()));
+            }
+            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+num+"&endDate="+lasttime.get(keyWords.get(keyWords.size()-1).word)+"&words="+keyWords.get(keyWords.size()-1).word);
         }
         notOverNum=urls.size();
         for(int i=0;i<urls.size();i++){
             final String url=urls.get(i);
+            final String tmpkw=keyWords.get(i).word;
             Thread thread=new Thread(new Runnable() {
                 @Override
                 public void run() {
                     NewsFetcher fetcher=new NewsFetcher();
                     final ArrayList<NewsMessage> messages=fetcher.getNews(url);
                     for(NewsMessage mes:messages){
-                        synchronized (lastTime) {
-                            if(mes.getTime().compareTo(lastTime)<0){
-                                lastTime = mes.getTime();
+                        synchronized (lasttime) {
+                            if(mes.getTime().compareTo(lasttime.get(tmpkw))<0){
+                                lasttime.put(tmpkw,mes.getTime());
                             }
                         }
                     }
                     try {
-                        Date dt=tmp.parse(lastTime);
+                        Date dt=tmp.parse(lasttime.get(tmpkw));
                         dt.setTime(dt.getTime()-1000);
-                        lastTime=tmp.format(dt);
+                        lasttime.put(tmpkw,tmp.format(dt));
                     } catch (ParseException e) {
                     }
                     try {
@@ -450,6 +480,14 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
                                 boolean visible;
                                 for (int i = 0; i < messages.size(); ++i) {
                                     synchronized (newsList){
+                                        boolean duplicated=false;
+                                        for(NewsMessage newsMessage:news){
+                                            if(newsMessage.getTitle().equals(messages.get(i).getTitle())){
+                                                duplicated=true;
+                                                break;
+                                            }
+                                        }
+                                        if(duplicated) continue;
                                         visible=true;
                                         for(KeyWord keyWord:messages.get(i).getKeyWords()){
                                             if(banWords.contains(keyWord.word)) visible=false;
@@ -477,11 +515,14 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         checkConnected();
         if(!connMark) return;
         final SimpleDateFormat tmp=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(lastTime==null) lastTime=tmp.format(new Date());
         final ArrayList<String> urls=new ArrayList<>();
-        ArrayList<KeyWord> keyWords=newsDatabaseManager.selectKeywords(3);
+        final ArrayList<KeyWord> keyWords=newsDatabaseManager.selectKeywords(3);
         if(keyWords.size()==0){
-            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size=10&endDate="+lastTime);
+            if(lasttime.get("")==null){
+                lasttime.put("",tmp.format(new Date()));
+            }
+            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size=10&endDate="+lasttime.get(""));
+            keyWords.add(new KeyWord("",1));
         }
         else{
             double sum=0.0;
@@ -489,29 +530,36 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
             int num=10;
             for(int i=0;i<keyWords.size()-1;i++){
                 int size=(int)(10*keyWords.get(i).score/sum);num-=size;
-                urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+size+"&endDate="+lastTime+"&words="+keyWords.get(i).word);
+                if(lasttime.get(keyWords.get(i).word)==null){
+                    lasttime.put(keyWords.get(i).word,tmp.format(new Date()));
+                }
+                urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+size+"&endDate="+lasttime.get(keyWords.get(i).word)+"&words="+keyWords.get(i).word);
             }
-            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+num+"&endDate="+lastTime+"&words="+keyWords.get(keyWords.size()-1).word);
+            if(lasttime.get(keyWords.get(keyWords.size()-1).word)==null){
+                lasttime.put(keyWords.get(keyWords.size()-1).word,tmp.format(new Date()));
+            }
+            urls.add("https://api2.newsminer.net/svc/news/queryNewsList?size="+num+"&endDate="+lasttime.get(keyWords.get(keyWords.size()-1).word)+"&words="+keyWords.get(keyWords.size()-1).word);
         }
         notOverNum=urls.size();
         for(int i=0;i<urls.size();i++){
             final String url=urls.get(i);
+            final String tmpkw=keyWords.get(i).word;
             Thread thread=new Thread(new Runnable() {
                 @Override
                 public void run() {
                     NewsFetcher fetcher=new NewsFetcher();
                     final ArrayList<NewsMessage> messages=fetcher.getNews(url);
                     for(NewsMessage mes:messages){
-                        synchronized (lastTime) {
-                            if(mes.getTime().compareTo(lastTime)<0){
-                                lastTime = mes.getTime();
+                        synchronized (lasttime) {
+                            if(mes.getTime().compareTo(lasttime.get(tmpkw))<0){
+                                lasttime.put(tmpkw,mes.getTime());
                             }
                         }
                     }
                     try {
-                        Date dt=tmp.parse(lastTime);
+                        Date dt=tmp.parse(lasttime.get(tmpkw));
                         dt.setTime(dt.getTime()-1000);
-                        lastTime=tmp.format(dt);
+                        lasttime.put(tmpkw,tmp.format(dt));
                     } catch (ParseException e) {
                     }
                     try {
@@ -530,6 +578,14 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
                                 boolean visible;
                                 for (int i = 0; i < messages.size(); ++i) {
                                     synchronized (newsList){
+                                        boolean duplicated=false;
+                                        for(NewsMessage newsMessage:news){
+                                            if(newsMessage.getTitle().equals(messages.get(i).getTitle())){
+                                                duplicated=true;
+                                                break;
+                                            }
+                                        }
+                                        if(duplicated) continue;
                                         visible=true;
                                         for(KeyWord keyWord:messages.get(i).getKeyWords()){
                                             if(banWords.contains(keyWord.word)) visible=false;

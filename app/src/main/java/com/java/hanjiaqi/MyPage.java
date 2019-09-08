@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MyPage extends Fragment {
@@ -29,7 +31,7 @@ public class MyPage extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(tv2!=null)tv2.setText("当前屏蔽的关键词：\n"+String.join(",",newsDatabaseManager.selectBanWords()));
+        if(tv2!=null)tv2.setText("当前屏蔽的关键词：\n"+joinString(",",newsDatabaseManager.selectBanWords()));
     }
 
     @Nullable
@@ -48,14 +50,17 @@ public class MyPage extends Fragment {
         EditText editText1=view.findViewById(R.id.mypage_banword);
         EditText editText2=view.findViewById(R.id.mypage_disbanword);
         tv2=view.findViewById(R.id.mypage_alreadyban);
-        tv2.setText("当前屏蔽的关键词：\n"+String.join(",",newsDatabaseManager.selectBanWords()));
+        tv2.setText("当前屏蔽的关键词：\n"+joinString(",",newsDatabaseManager.selectBanWords()));
         banbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String forban=editText1.getText().toString();
                 // add forban to database
                 newsDatabaseManager.addBanWord(forban);
-                tv2.setText("当前屏蔽的关键词：\n"+String.join(",",newsDatabaseManager.selectBanWords()));
+                Toast.makeText(context,"屏蔽关键词成功！",Toast.LENGTH_SHORT).show();
+                tv2.setText("当前屏蔽的关键词：\n"+joinString(",",newsDatabaseManager.selectBanWords()));
+                editText1.setText("");
+                editText1.setHint("输入要屏蔽的关键词");
                 //modify tv2 add this word
             }
         });
@@ -64,8 +69,15 @@ public class MyPage extends Fragment {
             public void onClick(View view) {
                 String fordisban=editText2.getText().toString();
                 // dis add disforban to database
-                newsDatabaseManager.delBanWord(fordisban);
-                tv2.setText("当前屏蔽的关键词：\n"+String.join(",",newsDatabaseManager.selectBanWords()));
+                if(newsDatabaseManager.delBanWord(fordisban)){
+                    Toast.makeText(context,"关键词\""+fordisban+"\"已恢复显示！",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(context,"关键词\""+fordisban+"\"并不在列表中",Toast.LENGTH_SHORT).show();
+                }
+                editText2.setText("");
+                editText2.setHint("输入要恢复的关键词");
+                tv2.setText("当前屏蔽的关键词：\n"+joinString(",",newsDatabaseManager.selectBanWords()));
                 //modify tv2 dis add  this word
             }
         });
@@ -74,13 +86,21 @@ public class MyPage extends Fragment {
             @Override
             public void onClick(View view) {
                 newsDatabaseManager.delAllBanWords();
-                tv2.setText("当前屏蔽的关键词：\n"+String.join(",",newsDatabaseManager.selectBanWords()));
+                tv2.setText("当前屏蔽的关键词：\n"+joinString(",",newsDatabaseManager.selectBanWords()));
+                Toast.makeText(context,"屏蔽词已清空！",Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
         return view;
+    }
+
+    public String joinString(String linkword,ArrayList<String> sequences){
+        StringBuilder stringBuilder=new StringBuilder();
+        if(sequences.size()==0) return "";
+        for(int i=0;i<sequences.size()-1;i++){
+            stringBuilder.append(sequences.get(i));
+            stringBuilder.append(linkword);
+        }
+        stringBuilder.append(sequences.get(sequences.size()-1));
+        return stringBuilder.toString();
     }
 }

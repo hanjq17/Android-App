@@ -358,8 +358,13 @@ public class NewsDatabaseManager {
         writableDatabase.insert("banWords", null, contentValues);
     }
 
-    public void delBanWord(String banWord){
+    public boolean delBanWord(String banWord){
+        Cursor cursor=writableDatabase.query("banWords",null,"username = ? and banWord = ?",new String[]{currentUser,banWord},null,null,null,null);
+        if(cursor.getCount()==0){
+            return false;
+        }
         writableDatabase.delete("banWords", "banWord = ? and username = ?", new String[]{banWord,currentUser});
+        return true;
     }
 
     public ArrayList<String> selectBanWords(){

@@ -78,7 +78,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:id="@+id/mypage_disbanword"
-        android:hint="输入要屏蔽的关键词"
+        android:hint="输入要恢复的关键词"
         android:textColorHint="@color/gray"
         />
     <Button

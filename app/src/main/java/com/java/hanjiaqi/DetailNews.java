@@ -280,7 +280,7 @@ public class DetailNews extends AppCompatActivity implements View.OnClickListene
                 ShareEntity testBean = new ShareEntity(titleStr, titleStr);
                 testBean.setUrl(url); //分享链接
                 if(images.size()!=0) testBean.setImgUrl(images.get(0));
-                ShareUtil.showShareDialog(this,  testBean, ShareConstant.REQUEST_CODE);
+                ShareUtil.showShareDialog(this,  ShareConstant.SHARE_CHANNEL_WEIXIN_CIRCLE | ShareConstant.SHARE_CHANNEL_WEIXIN_FRIEND | ShareConstant.SHARE_CHANNEL_SINA_WEIBO, testBean, ShareConstant.REQUEST_CODE);
 
 
 
