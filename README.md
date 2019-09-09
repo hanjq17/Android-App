@@ -13,7 +13,7 @@
 ### 制作者
 
 ```
-hanjq17@mails.tsinghua.edu.cn		Git:hanjq17		jiaor17@mails.tsinghua.edu.cn   Git:jiaor17
+hanjq17@mails.tsinghua.edu.cn	  Git:hanjq17  jiaor17@mails.tsinghua.edu.cn   Git:jiaor17
 ```
 
 ### 实现的功能
