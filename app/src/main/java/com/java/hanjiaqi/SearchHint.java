@@ -29,6 +29,12 @@ public class SearchHint extends Fragment {
         newsDatabaseManager=NewsDatabaseManager.getInstance(father);
     }
 
+    public SearchHint(){
+        father=getActivity();
+        searching="";
+        newsDatabaseManager=NewsDatabaseManager.getInstance(father);
+    }
+
     public void changeSearchText(String searching){
         this.searching=searching;
         newsList.removeAllViews();

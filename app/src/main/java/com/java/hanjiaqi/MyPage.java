@@ -28,6 +28,11 @@ public class MyPage extends Fragment {
         newsDatabaseManager=NewsDatabaseManager.getInstance(context);
     }
 
+    MyPage(){
+        context=getActivity();
+        newsDatabaseManager=NewsDatabaseManager.getInstance(context);
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

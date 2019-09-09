@@ -34,6 +34,15 @@ public class NewsPage extends Fragment {
         }
     }
 
+    public NewsPage(){
+        father=getActivity();
+        NewsDatabaseManager newsDatabaseManager=NewsDatabaseManager.getInstance(father);
+        if(newsDatabaseManager.selectItemByStatus(1).size()==0) {
+            newsDatabaseManager.setDefault();
+            Log.d("111","222");
+        }
+    }
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

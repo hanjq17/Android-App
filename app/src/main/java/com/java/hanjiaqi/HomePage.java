@@ -78,6 +78,15 @@ public class HomePage extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    public HomePage(){
+        father=getActivity();
+        type="最新";
+        newsDatabaseManager=NewsDatabaseManager.getInstance(father);
+        imageLoader=ImageLoader.getInstance();
+        toast=Toast.makeText(father,"Loading",Toast.LENGTH_SHORT);
+        disconnectView=View.inflate(father,R.layout.disconnect,null);
+    }
+
     public HomePage(Context context, String type) {
         father=context;
         this.type=type;

@@ -55,6 +55,14 @@ public class SearchPage extends Fragment {
         disconnectView=View.inflate(context,R.layout.disconnect,null);
     }
 
+    public SearchPage(){
+        father=getActivity();
+        this.keywords="";
+        newsDatabaseManager=NewsDatabaseManager.getInstance(father);
+        toast=Toast.makeText(father,"Loading",Toast.LENGTH_SHORT);
+        disconnectView=View.inflate(father,R.layout.disconnect,null);
+    }
+
     private boolean isConnected(){
         if (father != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) father.getSystemService(Context.CONNECTIVITY_SERVICE);

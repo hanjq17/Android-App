@@ -64,6 +64,13 @@ public class RecommandPage extends Fragment implements SwipeRefreshLayout.OnRefr
         }
     };
 
+    public RecommandPage(){
+        father=getActivity();
+        newsDatabaseManager=NewsDatabaseManager.getInstance(father);
+        toast= Toast.makeText(father,"Loading",Toast.LENGTH_SHORT);
+        disconnectView=View.inflate(father,R.layout.disconnect,null);
+    }
+
     public RecommandPage(Context context) {
         father=context;
         newsDatabaseManager=NewsDatabaseManager.getInstance(context);
