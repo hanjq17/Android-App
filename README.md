@@ -62,26 +62,25 @@ hanjq17@mails.tsinghua.edu.cn		Git:hanjq17		jiaor17@mails.tsinghua.edu.cn   Git:
 SplashActivity在App打开时会有进场页面和动画效果。
 
 ### App截图
+<img src="./pics/1.png/" style="zoom:50%">                <img src="./pics/2.png/" style="zoom:38%">
 
-![avatar](/Users/hanjq17/Desktop/1.png)
 
-![avatar](/Users/hanjq17/Desktop/2.png)
 
-![avatar](/Users/hanjq17/Desktop/3.png)
+<img src="./pics/3.png/" style="zoom:45%">                <img src="./pics/4.png/" style="zoom:53%">
 
-![avatar](/Users/hanjq17/Desktop/4.png)
 
-![avatar](/Users/hanjq17/Desktop/6.png)
 
-![avatar](/Users/hanjq17/Desktop/7.png)
+<img src="./pics/5.png/" style="zoom:50%">                <img src="./pics/6.png/" style="zoom:42%">
 
-![avatar](/Users/hanjq17/Desktop/8.png)
 
-![avatar](/Users/hanjq17/Desktop/9.png)
 
-![avatar](/Users/hanjq17/Desktop/10.png)
+<img src="./pics/7.png/" style="zoom:57%">                <img src="./pics/8.png/" style="zoom:54%">
 
-![avatar](/Users/hanjq17/Desktop/11.png)
+
+
+<img src="./pics/9.png/" style="zoom:48%">                <img src="./pics/10.png/" style="zoom:40%">
+
+
 
 想学iOS开发哦😄~加油！
 
