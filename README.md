@@ -1,5 +1,6 @@
 # Android-App
-###使用方式
+
+### 使用方式
 
 请用git clone @here 拷贝该项目，用Android Studio打开本项目进行查看和运行。
 
@@ -9,7 +10,7 @@
 ./app-debug.apk
 ```
 
-###制作者
+### 制作者
 
 ```
 hanjq17@mails.tsinghua.edu.cn		Git:hanjq17		jiaor17@mails.tsinghua.edu.cn   Git:jiaor17
